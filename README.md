@@ -32,7 +32,7 @@ This Telegram bot serves as a powerful tool for cryptocurrency trading, providin
 2. Navigate to the project directory:
 
     ```bash
-    cd <project-repo>
+    cd whisper
     ```
 
 3. Install the required dependencies:
