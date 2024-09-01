@@ -2,6 +2,7 @@ from aiogram.types import Message
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from config.settings import Settings
 from telegram.commands import CommandHandler
@@ -23,7 +24,7 @@ class TelegramBot:
 
     async def send_welcome(self, message: Message):
         await message.reply(
-            "Welcome! Use /sma <symbol> <period> <interval> to get SMA."
+            "Welcome! Use /sma <exchange_name> <symbol> <period> <interval> to get SMA."
         )
 
     async def handle_sma(self, message: Message):

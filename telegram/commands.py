@@ -2,17 +2,18 @@ from aiogram import types
 
 from observers.price_alert import PriceAlert
 from observers.event_processor import EventProcessor
-from exchange.websocket.binance import BinanceWebsocket
+from exchange.websocket_factory import WebsocketFactory
 
 
 class CommandHandler:
     def __init__(self, bot):
         self.bot = bot
+        self.websocket_factory = WebsocketFactory()
         self.connector = None
 
     async def handle_sma_command(self, message: types.Message):
         try:
-            _, symbol, period, interval = message.text.split()
+            _, exchange_name, symbol, period, interval = message.text.split()
             period = int(period)
             if period < 1:
                 raise ValueError("Period must be greater than 0.")
@@ -20,13 +21,15 @@ class CommandHandler:
             chat_id = message.chat.id
             await self.bot.send_message(
                 chat_id,
-                f"Opening WebSocket for {symbol.upper()} with SMA period {period} and interval {interval}...",
+                f"Opening WebSocket for {symbol.upper()} on {exchange_name} with SMA period {period} and interval {interval}...",
             )
 
             event_processor = EventProcessor(self.bot, chat_id, sma_period=period)
             price_alert = PriceAlert(self.bot, chat_id)
 
-            self.connector = BinanceWebsocket(symbol, interval)
+            self.connector = self.websocket_factory.create_websocket(
+                exchange_name, symbol, interval
+            )
             self.connector.register_observer(event_processor)
             self.connector.register_observer(price_alert)
 
@@ -40,6 +43,7 @@ class CommandHandler:
             await self.bot.send_message(
                 message.chat.id, "Stopped the WebSocket connection."
             )
+            self.connector = None
         else:
             await self.bot.send_message(
                 message.chat.id, "No active WebSocket connection found."

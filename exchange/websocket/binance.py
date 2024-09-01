@@ -4,11 +4,10 @@ import websockets
 
 from loguru import logger
 
-from observers.base_observer import Observer
-from exchange.interfaces.subject import Subject
+from exchange.interfaces.subject import WebsocketInterface
 
 
-class BinanceWebsocket(Subject):
+class BinanceWebsocket(WebsocketInterface):
     def __init__(self, symbols, interval):
         self.base_url = "wss://stream.binance.com:9443/ws"
         self.symbols = symbols

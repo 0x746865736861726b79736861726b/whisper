@@ -34,7 +34,6 @@ class EventProcessor(Observer):
         return sum(self.price_history) / self.sma_period
 
     async def save_to_db(self, symbol, price, sma):
-        # Create the log message for saving data
         log_message = f"Saving data to DB: {symbol}, Price: {price}, SMA: {sma}"
         logger.info(log_message)
         # await self.bot.send_message(self.chat_id, log_message)
