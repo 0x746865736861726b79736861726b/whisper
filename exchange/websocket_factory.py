@@ -1,4 +1,4 @@
-from exchange.websocket.binance import BinanceWebsocket
+from exchange.api.websocket.binance import BinanceWebsocket
 
 
 class WebsocketFactory:

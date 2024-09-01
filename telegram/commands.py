@@ -3,6 +3,7 @@ from aiogram import types
 from observers.price_alert import PriceAlert
 from observers.event_processor import EventProcessor
 from exchange.websocket_factory import WebsocketFactory
+from observers.historical_processor import InitialCandlesObserver
 
 
 class CommandHandler:
@@ -25,6 +26,15 @@ class CommandHandler:
             )
 
             event_processor = EventProcessor(self.bot, chat_id, sma_period=period)
+
+            # Створюємо об'єкт InitialCandlesObserver
+            initial_candles_observer = InitialCandlesObserver(
+                self.bot, chat_id, symbol, period, interval, event_processor
+            )
+
+            # Отримуємо початкові свічки
+            await initial_candles_observer.update()
+
             price_alert = PriceAlert(self.bot, chat_id)
 
             self.connector = self.websocket_factory.create_websocket(

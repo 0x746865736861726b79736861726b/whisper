@@ -29,11 +29,8 @@ class EventProcessor(Observer):
         await self.save_to_db(symbol, price, sma)
 
     def calculate_sma(self):
-        if len(self.price_history) < self.sma_period:
-            return sum(self.price_history) / len(self.price_history)
         return sum(self.price_history) / self.sma_period
 
     async def save_to_db(self, symbol, price, sma):
         log_message = f"Saving data to DB: {symbol}, Price: {price}, SMA: {sma}"
         logger.info(log_message)
-        # await self.bot.send_message(self.chat_id, log_message)
