@@ -34,7 +34,13 @@ This Telegram bot serves as a powerful tool for cryptocurrency trading, providin
     ```bash
     cd whisper
     ```
+3. Edit `.env`:
 
+    ```bash
+    TELEGRAM_API_TOKEN=""
+    BINANCE_API_KEY=""
+    BINANCE_API_SECRET=""
+    ```
 3. Install the required dependencies:
 
     ```bash
