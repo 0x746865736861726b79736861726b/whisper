@@ -14,7 +14,6 @@ class EventProcessor(Observer):
         self.indicators = []
 
     async def register_indicator(self, indicator):
-        """Register an indicator to be updated with new prices."""
         self.indicators.append(indicator)
 
     async def update(self, symbol, price):
@@ -31,9 +30,15 @@ class EventProcessor(Observer):
                 break
 
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        log_message = f"{symbol.upper()} price is {price}. SMA {sma_value}; {timestamp}"
-        logger.info(log_message)
-        await self.bot.send_message(self.chat_id, log_message)
+
+        if sma_value is not None:
+            log_message = (
+                f"{symbol.upper()} price is {price}. SMA {sma_value}; {timestamp}"
+            )
+            logger.info(log_message)
+            await self.bot.send_message(self.chat_id, log_message)
+        else:
+            logger.debug(f"{symbol.upper()} price is {price}. SMA is not ready yet.")
 
         await self.save_to_db(symbol, price, sma_value)
 
