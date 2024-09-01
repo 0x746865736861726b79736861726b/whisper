@@ -1,6 +1,5 @@
-import json
-
 import aiohttp
+from loguru import logger
 
 
 class BinanceApiHandler:
@@ -13,6 +12,7 @@ class BinanceApiHandler:
             async with session.get(url) as response:
                 if response.status == 200:
                     data = await response.json()
+                    logger.debug(f"Initial candles: {data}")
                     return [float(candle[4]) for candle in data]
                 else:
                     raise Exception("Failed to fetch initial candles.")
