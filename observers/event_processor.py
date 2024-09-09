@@ -4,6 +4,7 @@ from datetime import datetime
 from loguru import logger
 
 from observers.base_observer import Observer
+from observers.handlers.influx import InfluxHandler
 from observers.indicators.sma_indecator import SMAIndicator
 
 
@@ -12,6 +13,7 @@ class EventProcessor(Observer):
         self.bot = bot
         self.chat_id = chat_id
         self.indicators = []
+        self.db_handler = InfluxHandler()
 
     async def register_indicator(self, indicator):
         self.indicators.append(indicator)
@@ -40,8 +42,7 @@ class EventProcessor(Observer):
         else:
             logger.debug(f"{symbol.upper()} price is {price}. SMA is not ready yet.")
 
-        await self.save_to_db(symbol, price, sma_value)
+        await self.db_handler.save_data(symbol, price, sma_value)
 
-    async def save_to_db(self, symbol, price, sma):
-        log_message = f"Saving data to DB: {symbol}, Price: {price}, SMA: {sma}"
-        logger.info(log_message)
+    async def close(self):
+        self.db_handler.close()

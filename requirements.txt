@@ -17,3 +17,4 @@ python-dotenv==1.0.1
 typing_extensions==4.12.2
 websockets==13.0.1
 yarl==1.9.6
+influxdb-client==1.45.0
